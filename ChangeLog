@@ -1,3 +1,8 @@
+2010-09-18  rocky <rockyb@rubyforge.org>
+
+	* .gitignore, ChangeLog, README.textile, Rakefile: Bang on Rakefile
+	for testing packaging and installing.
+
 2010-09-18  rvm <rocky-rvm@static-71-183-236-17.nycmny.fios.verizon.net>
 
 	* Initial require_relative code.

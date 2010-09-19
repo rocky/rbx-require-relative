@@ -1,40 +1,39 @@
 #!/usr/bin/env rake
 # -*- Ruby -*-
-require 'rubygems'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
-require 'rake/testtask'
-
 # Are we rubinius? We'll test by checking the specific function we need.
 raise RuntimeError, 'This package is for rubinius only!' unless
   Object.constants.include?('Rubinius') && 
   Rubinius.constants.include?('VM') && 
   Rubinius::VM.respond_to?(:backtrace)
 
-rake_dir = File.dirname(__FILE__)
+require 'rubygems'
+require 'rake/gempackagetask'
+require 'rake/rdoctask'
+require 'rake/testtask'
 
-desc 'Create a GNU-style ChangeLog via git2cl'
-task :ChangeLog do
-  system('git log --pretty --numstat --summary | git2cl > ChangeLog')
-end
+FILES = FileList[%w(
+  LICENSE
+  ChangeLog
+  NEWS
+  README.textile 
+  Rakefile
+  lib/*.rb
+  test/*.rb
+)]
 
 desc "Test everything."
-test_task = task do 
+test_task = task :test => :lib do 
   Rake::TestTask.new(:test) do |t|
+    t.libs << './lib'
     t.pattern = 'test/test-*.rb'
     t.verbose = true
   end
 end
 
-FILES = FileList[%w(
-  README.textile 
-  LICENSE
-  NEWS
-  ChangeLog
-  Rakefile
-  test/test-rr.rb
-  require_relative.rb
-)]
+desc 'Create a GNU-style ChangeLog via git2cl'
+task :ChangeLog do
+  system('git log --pretty --numstat --summary | git2cl > ChangeLog')
+end
 
 spec = Gem::Specification.new do |spec|
   spec.name = 'rbx-require-relative'
@@ -45,6 +44,7 @@ spec = Gem::Specification.new do |spec|
   spec.author = "R. Bernstein"
   spec.email = "rockyb@rubyforge.org"
   spec.platform = Gem::Platform::RUBY
+  spec.require_path = "lib"
   spec.files = FILES.to_a
 
   spec.date = Time.now

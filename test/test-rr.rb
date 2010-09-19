@@ -2,7 +2,7 @@ require 'test/unit'
 
 # require_relative the old-fashioned way...
 require File.join(File.expand_path(File.dirname(__FILE__), 
-                                   '../require_relative'))
+                                   '../lib/require_relative'))
 
 class TestRR < Test::Unit::TestCase
   ## require 'tmpdir'
