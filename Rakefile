@@ -12,41 +12,19 @@ raise RuntimeError, 'This package is for rubinius only!' unless
   Rubinius::VM.respond_to?(:backtrace)
 
 rake_dir = File.dirname(__FILE__)
-require 'rbconfig'
-RUBY_PATH = File.join(RbConfig::CONFIG['bindir'],  
-                      RbConfig::CONFIG['RUBY_INSTALL_NAME'])
 
 desc 'Create a GNU-style ChangeLog via git2cl'
 task :ChangeLog do
   system('git log --pretty --numstat --summary | git2cl > ChangeLog')
 end
 
-desc 'Test units - the smaller tests'
-task :'test:unit' do |t|
-  Rake::TestTask.new(:'test:unit') do |t|
-    t.test_files = FileList['test/test-*.rb']
-    # t.pattern = 'test/**/*test-*.rb' # instead of above
+desc "Test everything."
+test_task = task do 
+  Rake::TestTask.new(:test) do |t|
+    t.pattern = 'test/test-*.rb'
     t.verbose = true
   end
 end
-
-desc 'Test everything - unit tests for now.'
-task :test do
-  exceptions = %w(test:unit).collect do |task|
-    begin
-      Rake::Task[task].invoke
-      nil
-    rescue => e
-      e
-    end
-  end.compact
-  
-  exceptions.each {|e| puts e;puts e.backtrace }
-  raise "Test failures" unless exceptions.empty?
-end
-
-desc "Test everything - same as test."
-task :default => :test
 
 FILES = FileList[%w(
   README.textile 
@@ -54,12 +32,12 @@ FILES = FileList[%w(
   NEWS
   ChangeLog
   Rakefile
-  test/*.rb
+  test/test-rr.rb
   require_relative.rb
 )]
 
 spec = Gem::Specification.new do |spec|
-  spec.name = 'rbx-require_relative'
+  spec.name = 'rbx-require-relative'
   spec.homepage = 'http://wiki.github.com/rocky/rbx-require-relative'
   spec.summary = "Ruby 1.9's require_relative for rubinius < 1.1"
 
@@ -97,3 +75,28 @@ task :install_full => :package do
     install(spec)
   end
 end    
+
+
+# rake test isn't working so do it also this way via "rake check"
+# The below is stripped down from other code which is why it looks 
+# overblown for what it is.
+require 'rbconfig'
+RUBY_PATH = File.join(RbConfig::CONFIG['bindir'],  
+                      RbConfig::CONFIG['RUBY_INSTALL_NAME'])
+def run_standalone_ruby_file(directory)
+  # puts ('*' * 10) + ' ' + directory + ' ' + ('*' * 10)
+  Dir.chdir(directory) do
+    Dir.glob('test-rr.rb').each do |ruby_file|
+      # puts( ('-' * 20) + ' ' + ruby_file + ' ' + ('-' * 20))
+      system(RUBY_PATH, ruby_file)
+    end
+  end
+end
+
+task :default => [:check]
+
+desc "Run each library Ruby file in standalone mode."
+rake_dir = File.dirname(__FILE__)
+task :check do
+  run_standalone_ruby_file(File.join(%W(#{rake_dir} test)))
+end
