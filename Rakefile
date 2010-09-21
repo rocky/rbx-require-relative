@@ -10,18 +10,33 @@ require 'rubygems'
 require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rake/testtask'
+require 'fileutils'
 
-FILES = FileList[%w(
-  LICENSE
-  ChangeLog
-  NEWS
-  README.textile 
-  Rakefile
-  lib/*.rb
-  test/*.rb
-)]
+ROOT_DIR = File.dirname(__FILE__)
+require File.join(ROOT_DIR, '/lib/version')
 
-desc "Test everything."
+def gemspec
+  @gemspec ||= eval(File.read('.gemspec'), binding, '.gemspec')
+end
+
+desc "Build the gem"
+task :package=>:gem
+task :gem=>:gemspec do
+  sh "gem build .gemspec"
+  FileUtils.mkdir_p 'pkg'
+  FileUtils.mv "#{gemspec.name}-#{gemspec.version}.gem", 'pkg'
+end
+
+task :default => [:test]
+
+desc 'Install locally'
+task :install => :package do
+  Dir.chdir(ROOT_DIR) do
+    sh %{gem install --local pkg/#{gemspec.name}-#{gemspec.version}}
+  end
+end    
+
+desc 'Test everything.'
 test_task = task :test => :lib do 
   Rake::TestTask.new(:test) do |t|
     t.libs << './lib'
@@ -30,73 +45,32 @@ test_task = task :test => :lib do
   end
 end
 
+desc "same as test"
+task :check => :test
+
 desc 'Create a GNU-style ChangeLog via git2cl'
 task :ChangeLog do
   system('git log --pretty --numstat --summary | git2cl > ChangeLog')
 end
 
-spec = Gem::Specification.new do |spec|
-  spec.name = 'rbx-require-relative'
-  spec.homepage = 'http://wiki.github.com/rocky/rbx-require-relative'
-  spec.summary = "Ruby 1.9's require_relative for rubinius < 1.1"
+desc "Remove built files"
+task :clean => [:clobber_package, :clobber_rdoc]
 
-  spec.version = '0.0.1'
-  spec.author = "R. Bernstein"
-  spec.email = "rockyb@rubyforge.org"
-  spec.platform = Gem::Platform::RUBY
-  spec.require_path = "lib"
-  spec.files = FILES.to_a
-
-  spec.date = Time.now
-  spec.has_rdoc = true
-  spec.extra_rdoc_files = %w(README.textile)
+desc "Generate the gemspec"
+task :generate do
+  puts gemspec.to_ruby
 end
 
-# Rake task to build the default package
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.need_tar = true
+desc "Validate the gemspec"
+task :gemspec do
+  gemspec.validate
 end
 
-def install(spec, *opts)
-  args = ['gem', 'install', "pkg/#{spec.name}-#{spec.version}.gem"] + opts
-  system(*args)
+task :clobber_package do
+  FileUtils.rm_rf File.join(ROOT_DIR, 'pkg')
 end
 
-desc 'Install locally'
-task :install => :package do
-  Dir.chdir(File::dirname(__FILE__)) do
-    # ri and rdoc take lots of time
-    install(spec, '--no-ri', '--no-rdoc')
-  end
-end    
-
-task :install_full => :package do
-  Dir.chdir(File::dirname(__FILE__)) do
-    install(spec)
-  end
-end    
-
-
-# rake test isn't working so do it also this way via "rake check"
-# The below is stripped down from other code which is why it looks 
-# overblown for what it is.
-require 'rbconfig'
-RUBY_PATH = File.join(RbConfig::CONFIG['bindir'],  
-                      RbConfig::CONFIG['RUBY_INSTALL_NAME'])
-def run_standalone_ruby_file(directory)
-  # puts ('*' * 10) + ' ' + directory + ' ' + ('*' * 10)
-  Dir.chdir(directory) do
-    Dir.glob('test-rr.rb').each do |ruby_file|
-      # puts( ('-' * 20) + ' ' + ruby_file + ' ' + ('-' * 20))
-      system(RUBY_PATH, ruby_file)
-    end
-  end
+task :clobber_rdoc do
+  FileUtils.rm_rf File.join(ROOT_DIR, 'doc')
 end
 
-task :default => [:check]
-
-desc "Run each library Ruby file in standalone mode."
-rake_dir = File.dirname(__FILE__)
-task :check do
-  run_standalone_ruby_file(File.join(%W(#{rake_dir} test)))
-end
