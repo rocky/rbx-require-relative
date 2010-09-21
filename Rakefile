@@ -36,17 +36,45 @@ task :install => :package do
   end
 end    
 
-desc 'Test everything.'
-test_task = task :test => :lib do 
-  Rake::TestTask.new(:test) do |t|
-    t.libs << './lib'
-    t.pattern = 'test/test-*.rb'
-    t.verbose = true
+## FIXME: For reasons I don't understand yet. doing this via rake's internal
+## mechanism doesn't do anything. Perhaps when I get the debugger going I 
+## can see why.
+# desc 'Test everything.'
+# test_task = task :test => :lib do 
+#   Rake::TestTask.new(:test) do |t|
+#     t.libs << './lib'
+#     t.pattern = 'test/test-*.rb'
+#     t.verbose = true
+#   end
+# end
+
+# desc "same as test"
+# task :check => :test
+
+
+require 'rbconfig'
+RUBY_PATH = File.join(RbConfig::CONFIG['bindir'],  
+                      RbConfig::CONFIG['RUBY_INSTALL_NAME'])
+
+def run_standalone_ruby_file(directory)
+  # puts ('*' * 10) + ' ' + directory + ' ' + ('*' * 10)
+  Dir.chdir(directory) do
+    Dir.glob('test-rr.rb').each do |ruby_file|
+      # puts( ('-' * 20) + ' ' + ruby_file + ' ' + ('-' * 20))
+      system(RUBY_PATH, ruby_file)
+    end
   end
 end
 
-desc "same as test"
-task :check => :test
+
+desc "Run each library Ruby file in standalone mode."
+rake_dir = File.dirname(__FILE__)
+task :check do
+  run_standalone_ruby_file(File.join(%W(#{rake_dir} test)))
+end
+task :default => [:check]
+
+# Remove the above when I figure out what's up with the commented-out code.
 
 desc 'Create a GNU-style ChangeLog via git2cl'
 task :ChangeLog do
@@ -73,4 +101,3 @@ end
 task :clobber_rdoc do
   FileUtils.rm_rf File.join(ROOT_DIR, 'doc')
 end
-
