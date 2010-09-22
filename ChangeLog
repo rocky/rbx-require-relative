@@ -1,3 +1,28 @@
+2010-09-20  rocky <rockyb@rubyforge.org>
+
+	* lib/version.rb: Set version number back to what it was
+
+2010-09-20  rocky <rockyb@rubyforge.org>
+
+	* Rakefile, lib/require_relative.rb, test/test-rr.rb: 
+	require_relative: Add RequireRelative::abs_file which is like
+	__FILE__ but gives the absolute location.  Rakefile: Had broken
+	tests because rake's default mechanism appears to be broken here and
+	I don't know why.  test-rr.rb: Reinstate more stringent testing -
+	chdir before require_relative
+
+2010-09-20  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, Makefile, Rakefile, lib/.gitignore, lib/Makefile,
+	lib/version.rb: Administrivia: Add packaging, a .gemspec, make
+	comptaibility and so on.
+
+2010-09-19  rocky <rockyb@rubyforge.org>
+
+	* ChangeLog, Rakefile, lib/require_relative.rb,
+	require_relative.rb, test/test-rr.rb: Gem packaging - this time, for
+	sure!
+
 2010-09-18  rocky <rockyb@rubyforge.org>
 
 	* .gitignore, ChangeLog, README.textile, Rakefile: Bang on Rakefile

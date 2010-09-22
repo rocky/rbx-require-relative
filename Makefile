@@ -1,10 +1,8 @@
-# Whatever it is you want to do, it should be forwarded to the 
-# to top-level irectories
-PHONY=check test all
+# I'll admit it -- I'm an absent-minded old-timer who has trouble
+# learning new tricks.
+.PHONY: all
 
-test: check
 all: check
-	true
 
 %: 
 	rake $@

@@ -29,13 +29,14 @@ Ruby 1.9's require_relative for Rubinius
   spec.license      = 'MIT'
   spec.platform     = Gem::Platform::RUBY
   spec.require_path = 'lib'
-  spec.required_ruby_version = '>= 1.0.1'
+  spec.required_ruby_version = '= 1.0.1'
   spec.summary      = spec.description
   spec.version      = RequireRelative::VERSION
   spec.has_rdoc     = true
 
   # Make the readme file the start page for the generated html
   spec.rdoc_options += %w(--main README)
-  spec.rdoc_options += ['--title', "Columnize #{RequireRelative::VERSION} Documentation"]
+  spec.rdoc_options += ['--title', 
+               "require_relative #{RequireRelative::VERSION} Documentation"]
 
 end

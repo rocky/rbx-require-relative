@@ -1,0 +1,11 @@
+h2. Ruby 1.9's relative_relative for Rubinus 1.0.1
+
+Here we add in Module RequireRelative method: *require_relative*, and *abs_file*. Example:
+
+bc.  require_relative './lib/foo' 
+
+But why *abs_file*?. Well, recall that *__FILE__* does not give an absolute path. So if you have chdir'd before useing *__FILE__*, you might not be able to retrieve the full path.
+
+The latest version is at "http://github.com/rocky/rbx-require-relative/"://github.com/rocky/rbx-require-relative/
+
+

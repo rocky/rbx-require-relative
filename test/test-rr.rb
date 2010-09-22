@@ -2,8 +2,9 @@ require 'test/unit'
 
 # require_relative the old-fashioned way...
 # Note that it's important there be no chdir before this require.
-require File.join(File.expand_path(File.dirname(__FILE__), 
-                                   '../lib/require_relative'))
+file = File.expand_path(File.join(File.dirname(__FILE__), 
+                                  '../lib/require_relative'))
+require file
 
 class TestRR < Test::Unit::TestCase
   require 'tmpdir'

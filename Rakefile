@@ -36,21 +36,13 @@ task :install => :package do
   end
 end    
 
-## FIXME: For reasons I don't understand yet. doing this via rake's internal
-## mechanism doesn't do anything. Perhaps when I get the debugger going I 
-## can see why.
-# desc 'Test everything.'
-# test_task = task :test => :lib do 
-#   Rake::TestTask.new(:test) do |t|
-#     t.libs << './lib'
-#     t.pattern = 'test/test-*.rb'
-#     t.verbose = true
-#   end
-# end
-
-# desc "same as test"
-# task :check => :test
-
+desc 'Test everything.'
+Rake::TestTask.new(:test) do |t|
+  t.libs << './lib'
+  t.pattern = 'test/test-*.rb'
+  t.verbose = true
+end
+task :test => [:lib]
 
 require 'rbconfig'
 RUBY_PATH = File.join(RbConfig::CONFIG['bindir'],  
