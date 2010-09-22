@@ -24,7 +24,7 @@ Ruby 1.9's require_relative for Rubinius
 }
   spec.email        = 'rockyb@rubyforge.net'
   spec.files        = FILES.to_a  
-  spec.homepage     = 'http://github.org/rocky/rbx-require-relative'
+  spec.homepage     = 'http://github.com/rocky/rbx-require-relative'
   spec.name         = 'rbx-require-relative'
   spec.license      = 'MIT'
   spec.platform     = Gem::Platform::RUBY
