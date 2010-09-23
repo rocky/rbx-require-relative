@@ -6,6 +6,13 @@ raise RuntimeError, 'This package is for rubinius only!' unless
   Rubinius.constants.include?('VM') && 
   Rubinius::VM.respond_to?(:backtrace)
 
+begin
+  require_relative 'lib/version'
+  puts 'Looks like you already have require_relative!'
+  exit 5
+rescue NameError
+end
+
 require 'rubygems'
 require 'rake/gempackagetask'
 require 'rake/rdoctask'
@@ -64,7 +71,7 @@ rake_dir = File.dirname(__FILE__)
 task :check do
   run_standalone_ruby_file(File.join(%W(#{rake_dir} test)))
 end
-task :default => [:check]
+task :default => [:test]
 
 # Remove the above when I figure out what's up with the commented-out code.
 
