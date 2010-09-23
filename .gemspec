@@ -4,7 +4,7 @@ require 'rake'
 require 'rubygems' unless 
   Object.const_defined?(:Gem)
 require File.dirname(__FILE__) + "/lib/version" unless 
-  Object.const_defined?(RequireRelative)
+  Object.const_defined?(:RequireRelative)
 
 FILES = FileList[%w(
   LICENSE
