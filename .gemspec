@@ -19,24 +19,42 @@ FILES = FileList[%w(
 Gem::Specification.new do |spec|
   spec.authors      = ['R. Bernstein']
   spec.date         = Time.now
-  spec.description  = %q{
-Ruby 1.9's require_relative for Rubinius
-}
+  spec.description  = <<-DESCRIBE
+Ruby 1.9's require_relative for Rubinius. 
+
+We also add abs_path which is like __FILE__ but __FILE__ can be fooled
+by a sneaky "chdir" while abs_path can't. 
+
+If you are running on Ruby 1.9.2, require_relative is the pre-defined
+version.  The benefit we provide in this situation by this package is
+the ability to write the same require_relative sequence in Rubinius
+1.8 and Ruby 1.9.
+  DESCRIBE
   spec.email        = 'rockyb@rubyforge.net'
   spec.files        = FILES.to_a  
   spec.homepage     = 'http://github.com/rocky/rbx-require-relative'
   spec.name         = 'rbx-require-relative'
   spec.license      = 'MIT'
-  spec.platform     = Gem::Platform::RUBY
+
   spec.require_path = 'lib'
-  spec.required_ruby_version = '~> 1.8.7'
+  spec.required_ruby_version = "~> #{RUBY_VERSION}"
+  spec.add_dependency('diff-lcs') # For testing only
+
   spec.summary      = spec.description
   spec.version      = RequireRelative::VERSION
   spec.has_rdoc     = true
 
-  # Make the readme file the start page for the generated html
+  # Make the README file the start page for the generated html
   spec.rdoc_options += %w(--main README)
   spec.rdoc_options += ['--title', 
                "require_relative #{RequireRelative::VERSION} Documentation"]
 
+  if (defined?(RUBY_DESCRIPTION) && 
+      RUBY_DESCRIPTION.start_with?('ruby 1.9.2frame'))
+    spec.add_dependency('rb-threadframe')
+    spec.platform = Gem::Platform::new ['universal', 'ruby', '1.9.2']
+  elsif Object.constants.include?('Rubinius') && 
+      Rubinius.constants.include?('VM')
+    spec.platform = Gem::Platform::new ['universal', 'rubinius', '1.2']
+  end
 end

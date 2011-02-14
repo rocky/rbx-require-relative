@@ -1,17 +1,18 @@
 #!/usr/bin/env rake
 # -*- Ruby -*-
 # Are we rubinius? We'll test by checking the specific function we need.
-raise RuntimeError, 'This package is for rubinius only!' unless
-  Object.constants.include?('Rubinius') && 
-  Rubinius.constants.include?('VM') && 
-  Rubinius::VM.respond_to?(:backtrace)
+raise RuntimeError, 'This package is for rubinius or 1.9.2-nframe only!' unless
+  (Object.constants.include?('Rubinius') && 
+   Rubinius.constants.include?('VM') && 
+   Rubinius::VM.respond_to?(:backtrace)) ||
+  (defined? RUBY_DESCRIPTION && RUBY_DESCRIPTION.start_with?('ruby 1.9.2frame'))
 
-begin
-  require_relative 'lib/version'
-  puts 'Looks like you already have require_relative!'
-  exit 5
-rescue NameError
-end
+# begin
+#   require_relative 'lib/version'
+#   puts 'Looks like you already have require_relative!'
+#   exit 5
+# rescue NameError
+# end
 
 require 'rubygems'
 require 'rake/gempackagetask'
@@ -26,12 +27,17 @@ def gemspec
   @gemspec ||= eval(File.read('.gemspec'), binding, '.gemspec')
 end
 
+def gem_file
+  "#{gemspec.name}-#{gemspec.version}-#{gemspec.platform.to_s}.gem"
+end
+
+
 desc "Build the gem"
 task :package=>:gem
 task :gem=>:gemspec do
   sh "gem build .gemspec"
   FileUtils.mkdir_p 'pkg'
-  FileUtils.mv "#{gemspec.name}-#{gemspec.version}.gem", 'pkg'
+  FileUtils.mv gem_file, 'pkg'
 end
 
 task :default => [:test]
@@ -39,7 +45,7 @@ task :default => [:test]
 desc 'Install locally'
 task :install => :package do
   Dir.chdir(ROOT_DIR) do
-    sh %{gem install --local pkg/#{gemspec.name}-#{gemspec.version}}
+    sh %{gem install --local pkg/#{gem_file}}
   end
 end    
 
@@ -47,7 +53,7 @@ desc 'Test everything.'
 Rake::TestTask.new(:test) do |t|
   t.libs << './lib'
   t.pattern = 'test/test-*.rb'
-  t.verbose = true
+  t.options = '--verbose' if $VERBOSE
 end
 task :test => [:lib]
 

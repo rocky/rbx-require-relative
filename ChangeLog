@@ -1,3 +1,44 @@
+2010-09-23  rocky <rockyb@rubyforge.org>
+
+	* .gemspec: Need symbol in defined?
+
+2010-09-23  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, Rakefile, lib/version.rb: Rakefile: check to see if
+	require_relative is already installed. .gemspec: cut-n-paste error
+	version.rb: bump version #
+
+2010-09-22  rocky <rockyb@rubyforge.org>
+
+	* .gemspec: Bang on gemspec Ruby version. For rubinius 1.0.1 .. 1.1
+	Gem.ruby_version is 1.8.7. I'm imagining 1.9 features will report
+	1.9 or some such thing.
+
+2010-09-22  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, NEWS, lib/version.rb: Update gemspec homepage link
+
+2010-09-22  rocky <rockyb@rubyforge.org>
+
+	* README.textile: More README tweaking
+
+2010-09-22  rocky <rockyb@rubyforge.org>
+
+	* README.textile: More README tweaking
+
+2010-09-22  rocky <rockyb@rubyforge.org>
+
+	* README.textile: textile hacking.
+
+2010-09-22  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, README.textile: Get version ranges in correctly.
+
+2010-09-22  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, ChangeLog, Makefile, NEWS, README.textile, Rakefile,
+	lib/Makefile, test/test-rr.rb: Get ready for release.
+
 2010-09-20  rocky <rockyb@rubyforge.org>
 
 	* lib/version.rb: Set version number back to what it was
