@@ -9,7 +9,13 @@ module RequireRelative
     if defined?(RubyVM::ThreadFrame)
       RubyVM::ThreadFrame.current.prev.source_container[1]
     elsif defined?(Rubinius) && "1.8.7" == RUBY_VERSION
-      Rubinius::VM.backtrace(1)[0].method.scope.data_path
+      scope = Rubinius::StaticScope.of_sender
+      script = scope.current_script
+      if script
+        script.data_path
+      else
+        nil
+      end
     end
   end
   module_function :abs_file
@@ -21,13 +27,18 @@ if defined?(Rubinius) && "1.8.7" == RUBY_VERSION
   module Kernel
     def require_relative(suffix)
       # Rubinius::Location#file stores relative file names while
-      # Rubinius::Location#scope.data store the absolute file name. It
-      # is possible (hopeful even) that in the future that Rubinius will
-      # change the API to be more intuitive. When that occurs, I'll
-      # change the below to that simpler thing.
-      dir = File.dirname(Rubinius::VM.backtrace(1)[0].
-                         method.scope.data_path)
-      require File.join(dir, suffix)
+      # Rubinius::Location#scope.current_script.data_path stores the
+      # absolute file name. It is possible (hopeful even) that in the
+      # future that Rubinius will change the API to be more
+      # intuitive. When that occurs, I'll change the below to that
+      # simpler thing.
+      scope = Rubinius::StaticScope.of_sender
+      script = scope.current_script
+      if script
+        require File.join(File.dirname(script.data_path), suffix)
+      else
+        raise LoadError "Something is wrong in trying to get relative path"
+      end
     end
   end
 end
