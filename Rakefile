@@ -1,6 +1,6 @@
 #!/usr/bin/env rake
 # -*- Ruby -*-
-# Are we rubiniuso r MRI 1.8?
+# Are we rubinius or MRI 1.8?
 raise RuntimeError, 'This package is for rubinius or 1.9.2-nframe only!' unless
   (Object.constants.include?('Rubinius') && 
    Rubinius.constants.include?('VM') && 
@@ -18,8 +18,8 @@ raise RuntimeError, 'This package is for rubinius or 1.9.2-nframe only!' unless
 # end
 
 require 'rubygems'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
+require 'rubygems/package_task'
+require 'rdoc/task'
 require 'rake/testtask'
 require 'fileutils'
 
@@ -31,7 +31,12 @@ def gemspec
 end
 
 def gem_file
-  "#{gemspec.name}-#{gemspec.version}-#{gemspec.platform.to_s}.gem"
+  if (RUBY_VERSION.start_with?('1.8') && 
+      RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto'))
+    "#{gemspec.name}-#{gemspec.version}.gem"
+  else
+    "#{gemspec.name}-#{gemspec.version}-#{gemspec.platform.to_s}.gem"
+  end
 end
 
 
