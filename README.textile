@@ -1,4 +1,4 @@
-h2. Ruby 1.9's relative_relative for Rubinus 1.0.1 .. 1.1
+h2. Ruby 1.9's relative_relative for Rubinus and MRI 1.8
 
 Here we add in Module RequireRelative method: *require_relative*, and *abs_file*. Example:
 

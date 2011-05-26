@@ -1,11 +1,14 @@
 #!/usr/bin/env rake
 # -*- Ruby -*-
-# Are we rubinius? We'll test by checking the specific function we need.
+# Are we rubiniuso r MRI 1.8?
 raise RuntimeError, 'This package is for rubinius or 1.9.2-nframe only!' unless
   (Object.constants.include?('Rubinius') && 
    Rubinius.constants.include?('VM') && 
    Rubinius::VM.respond_to?(:backtrace)) ||
-  (defined? RUBY_DESCRIPTION && RUBY_DESCRIPTION.start_with?('ruby 1.9.2frame'))
+  (defined? RUBY_DESCRIPTION && 
+   RUBY_DESCRIPTION.start_with?('ruby 1.9.2frame')) ||
+  (RUBY_VERSION.start_with?('1.8') && 
+   RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto'))
 
 # begin
 #   require_relative 'lib/version'
