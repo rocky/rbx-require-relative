@@ -1,3 +1,31 @@
+2011-05-26  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, Rakefile, lib/version.rb: Package versioning for MRI
+	1.8.7 was wrong.
+
+2011-05-26  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, README.textile, Rakefile, lib/require_relative.rb,
+	lib/version.rb, test/test-rr.rb: Handle MRI 1.8
+
+2011-04-22  rocky <rockyb@rubyforge.org>
+
+	* NEWS, lib/version.rb: Update for release.
+
+2011-04-22  rocky <rockyb@rubyforge.org>
+
+	* lib/require_relative.rb: Don't use
+	Rubinius::StaticScope#data_path, but mirror the logic for that until
+	an API is created that works like RequireRelative#abs_file. Also use
+	Rubinius::StaticScope.of_sender rather than backtrace. Thanks to
+	Evan Phoenix for advice on all of this.
+
+2011-02-14  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, ChangeLog, NEWS, Rakefile, lib/require_relative.rb,
+	lib/version.rb: Allow this to be build on 1.9.2-nframe as mostly a
+	no-op.
+
 2010-09-23  rocky <rockyb@rubyforge.org>
 
 	* .gemspec: Need symbol in defined?

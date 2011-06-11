@@ -1,6 +1,6 @@
 # Ruby 1.9's require_relative.
 
-if defined?(RubyVM)
+if defined?(RubyVM) && RUBY_DESCRIPTION.start_with?('ruby 1.9.2frame')
   require 'thread_frame'
 end
 

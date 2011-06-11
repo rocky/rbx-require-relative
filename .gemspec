@@ -43,14 +43,15 @@ the ability to write the same require_relative sequence in Rubinius
   spec.version      = RequireRelative::VERSION
   spec.has_rdoc     = true
 
-  # Make the README file the start page for the generated html
-  spec.rdoc_options += %w(--main README)
   spec.rdoc_options += ['--title', 
                "require_relative #{RequireRelative::VERSION} Documentation"]
 
   if (defined?(RUBY_DESCRIPTION) && 
       RUBY_DESCRIPTION.start_with?('ruby 1.9.2frame'))
     spec.add_dependency('rb-threadframe')
+    spec.platform = Gem::Platform::new ['universal', 'ruby', '1.9.2']
+  elsif (defined?(RUBY_DESCRIPTION) && 
+      RUBY_DESCRIPTION.start_with?('ruby 1.9.2'))
     spec.platform = Gem::Platform::new ['universal', 'ruby', '1.9.2']
   elsif Object.constants.include?('Rubinius') && 
       Rubinius.constants.include?('VM')
