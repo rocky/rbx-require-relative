@@ -1,3 +1,13 @@
+2011-06-11  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, Rakefile: Package name needs the kind of Ruby in it.
+	Sigh
+
+2011-06-11  rocky <rockyb@rubyforge.org>
+
+	* .gemspec, ChangeLog, NEWS, lib/require_relative.rb: Tolerance for
+	unpatched 1.9.2
+
 2011-05-26  rocky <rockyb@rubyforge.org>
 
 	* .gemspec, Rakefile, lib/version.rb: Package versioning for MRI
