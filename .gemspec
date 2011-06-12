@@ -56,8 +56,8 @@ the ability to write the same require_relative sequence in Rubinius
   elsif Object.constants.include?('Rubinius') && 
       Rubinius.constants.include?('VM')
     spec.platform = Gem::Platform::new ['universal', 'rubinius', '1.2']
-  elsif (RUBY_VERSION.start_with?('1.8') && 
+  elsif (RUBY_VERSION.start_with?('1.8.7') && 
          RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto'))
-    spec.platform = Gem::Platform::RUBY
+    spec.platform = Gem::Platform::new ['universal', 'ruby', '1.8.7']
   end
 end

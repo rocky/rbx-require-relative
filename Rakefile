@@ -31,12 +31,7 @@ def gemspec
 end
 
 def gem_file
-  if (RUBY_VERSION.start_with?('1.8') && 
-      RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto'))
-    "#{gemspec.name}-#{gemspec.version}.gem"
-  else
-    "#{gemspec.name}-#{gemspec.version}-#{gemspec.platform.to_s}.gem"
-  end
+  "#{gemspec.name}-#{gemspec.version}-#{gemspec.platform.to_s}.gem"
 end
 
 
@@ -94,9 +89,6 @@ task :ChangeLog do
   system('git log --pretty --numstat --summary | git2cl > ChangeLog')
 end
 
-desc "Remove built files"
-task :clean => [:clobber_package, :clobber_rdoc]
-
 desc "Generate the gemspec"
 task :generate do
   puts gemspec.to_ruby
@@ -106,6 +98,20 @@ desc "Validate the gemspec"
 task :gemspec do
   gemspec.validate
 end
+
+desc 'Remove residue from running patch'
+task :rm_patch_residue do
+  FileUtils.rm_rf FileList['**/*.{rej,orig}'].to_a, :verbose => true
+end
+
+desc 'Remove ~ backup files'
+task :rm_tilde_backups do
+  FileUtils.rm_rf Dir.glob('**/*~'), :verbose => true
+  FileUtils.rm_rf Dir.glob('**/*.rbc'), :verbose => true
+end
+
+desc "Remove built files"
+task :clean => [:clobber_package, :clobber_rdoc, :rm_patch_residue, :rm_tilde_backups]
 
 task :clobber_package do
   FileUtils.rm_rf File.join(ROOT_DIR, 'pkg')
