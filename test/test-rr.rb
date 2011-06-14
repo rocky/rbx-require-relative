@@ -11,7 +11,8 @@ class TestRR < Test::Unit::TestCase
   def test_basic
     dir = 
       if RUBY_VERSION.start_with?('1.8') && 
-          RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto')
+          (RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto') ||
+           RUBY_ENGINE == 'jruby')
         puts "Note: require_relative doesn't work with Dir.chdir as it does on Rubinius or 1.9"
         '.'
       else

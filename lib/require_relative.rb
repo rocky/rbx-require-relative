@@ -48,7 +48,8 @@ elsif defined?(Rubinius) && '1.8.7' == RUBY_VERSION
     end
   end
 elsif (RUBY_VERSION.start_with?('1.8') && 
-       RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto'))
+       (RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto')) ||
+       RUBY_ENGINE == 'jruby')
   def require_relative(suffix)
     file = caller.first.split(/:\d/,2).first
     if /\A\((.*)\)/ =~ file # eval, etc.
