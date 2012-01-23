@@ -1,3 +1,7 @@
+0.0.6  (02-22-12)
+
+Allow Ruby 1.9.3
+
 0.0.5  (06-12-11) Fleetwood release
 
 Allow this to work on Ruby MRI 1.8 and 1.9. On 1.9 we don't do

@@ -1,3 +1,3 @@
 module RequireRelative
-  VERSION = '0.0.6dev'
+  VERSION = '0.0.6'
 end

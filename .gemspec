@@ -25,10 +25,10 @@ Ruby 1.9's require_relative for Rubinius and MRI 1.8.
 We also add abs_path which is like __FILE__ but __FILE__ can be fooled
 by a sneaky "chdir" while abs_path can't. 
 
-If you are running on Ruby 1.9.2, require_relative is the pre-defined
-version.  The benefit we provide in this situation by this package is
-the ability to write the same require_relative sequence in Rubinius
-1.8 and Ruby 1.9.
+If you are running on Ruby 1.9 or greater, require_relative is the
+pre-defined version.  The benefit we provide in this situation by this
+package is the ability to write the same require_relative sequence in
+Rubinius 1.8 and Ruby 1.9.
   DESCRIBE
   spec.email        = 'rockyb@rubyforge.net'
   spec.files        = FILES.to_a  
@@ -53,6 +53,9 @@ the ability to write the same require_relative sequence in Rubinius
   elsif (defined?(RUBY_DESCRIPTION) && 
       RUBY_DESCRIPTION.start_with?('ruby 1.9.2'))
     spec.platform = Gem::Platform::new ['universal', 'ruby', '1.9.2']
+  elsif (defined?(RUBY_DESCRIPTION) && 
+      RUBY_DESCRIPTION.start_with?('ruby 1.9.3'))
+    spec.platform = Gem::Platform::new ['universal', 'ruby', '1.9.3']
   elsif Object.constants.include?('Rubinius') && 
       Rubinius.constants.include?('VM')
     spec.platform = Gem::Platform::new ['universal', 'rubinius', '1.2']
