@@ -31,7 +31,11 @@ def gemspec
 end
 
 def gem_file
-  "#{gemspec.name}-#{gemspec.version}-#{gemspec.platform.to_s}.gem"
+  if gemspec.platform.to_s == 'ruby' 
+    "#{gemspec.name}-#{gemspec.version}.gem"
+  else
+    "#{gemspec.name}-#{gemspec.version}-#{gemspec.platform.to_s}.gem"
+  end
 end
 
 

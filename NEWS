@@ -1,3 +1,6 @@
+0.0.7  (02-26-12)
+Fix up MRI/REE 1.8.7 mess up.
+
 0.0.6  (02-22-12)
 
 Allow Ruby 1.9.3
