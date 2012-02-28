@@ -1,3 +1,7 @@
+0.0.8  (02-27-12)
+Remove platform used in gem. Give up on adding a dependency based on
+the Ruby version.
+
 0.0.7  (02-26-12)
 Fix up MRI/REE 1.8.7 mess up.
 

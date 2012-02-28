@@ -67,7 +67,7 @@ if __FILE__ == $0
   dir = 
     if RUBY_VERSION.start_with?('1.8') && 
         RUBY_COPYRIGHT.end_with?('Yukihiro Matsumoto')
-      puts "Note: require_relative doesn't work with Dir.chdir as it does on Rubinius or 1.9"
+      puts "Note: require_relative doesn't work with Dir.chdir as it does on Rubinius or 1.9.2-head-nframe"
       '.'
     else
       Dir.tmpdir
