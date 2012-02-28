@@ -37,7 +37,6 @@ Rubinius 1.8 and Ruby 1.9.
   spec.license      = 'MIT'
 
   spec.require_path = 'lib'
-  spec.required_ruby_version = "~> #{RUBY_VERSION}"
 
   spec.summary      = spec.description
   spec.version      = RequireRelative::VERSION

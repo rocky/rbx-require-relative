@@ -1,3 +1,6 @@
+0.0.9  (02-27-12)
+Remove dependency on Ruby version used to build gem. 
+
 0.0.8  (02-27-12)
 Remove platform used in gem. Give up on adding a dependency based on
 the Ruby version.
